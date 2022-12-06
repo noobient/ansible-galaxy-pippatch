@@ -1,0 +1,49 @@
+---
+- name: Install pip and patch
+  become: true
+  package:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - python3-pip
+      - patch
+  register: installed_pippatch
+  when: installed_pippatch is not defined
+
+- name: "Ensure {{ package }} pip package is installed"
+  command:
+    cmd: "pip3 install {{ package }}"
+  changed_when: ('Successfully installed' in installed_pkg.stdout)
+  when: force is defined and force|bool == true
+  register: installed_pkg
+
+- name: Determine package install path
+  shell:
+    cmd: "pip3 show {{ package }} | grep ^Location | mawk -F ':' '{print $2}' | xargs"
+  changed_when: false
+  register: pkg_path
+
+- name: Determine package version
+  shell:
+    cmd: "pip3 show {{ package }} | grep ^Version | mawk -F ':' '{print $2}' | xargs"
+  changed_when: false
+  register: pkg_ver
+
+- name: "Deploy patch to {{ pkg_path.stdout }}"
+  template:
+    src: "{{ patch }}.j2"
+    dest: "{{ pkg_path.stdout }}/{{ patch }}"
+    mode: '0644'
+
+- name: Test patch
+  command:
+    cmd: "patch -d {{ pkg_path.stdout }} -p0 --forward -i {{ patch }} --dry-run"
+  changed_when: false
+  failed_when: false
+  register: test_patch
+
+- name: Apply patch
+  command:
+    cmd: "patch -d {{ pkg_path.stdout }} -p0 --forward -i {{ patch }} --backup"
+  when: patch_already_str not in test_patch.stdout
