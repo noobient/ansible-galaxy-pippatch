@@ -5,7 +5,7 @@ galaxy_info:
   description: Patch pip packages
   license: license (MIT)
   min_ansible_version: '2.8'
-  platforms: [] # noqa meta-no-info
+  platforms: []
   galaxy_tags: []
 
 dependencies: []

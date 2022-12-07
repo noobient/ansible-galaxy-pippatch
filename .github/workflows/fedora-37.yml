@@ -20,4 +20,5 @@ jobs:
       - name: Test Galaxy role
         run: >
             docker run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-fedora37 /bin/bash -c
-            "ANSIBLE_ROLES_PATH=.. ANSIBLE_FORCE_COLOR=true ansible-playbook tests/main.yml"
+            "if [ -f requirements.yml ]; then ansible-galaxy role install --force -r requirements.yml; fi &&
+            ANSIBLE_ROLES_PATH=.. ANSIBLE_FORCE_COLOR=true ansible-playbook tests/main.yml"
