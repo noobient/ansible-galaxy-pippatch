@@ -20,4 +20,4 @@ jobs:
       - name: Test Galaxy role
         run: >
             docker run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-fedora37 /bin/bash -c
-            "ANSIBLE_ROLES_PATH=.. ansible-playbook tests/main.yml"
+            "ANSIBLE_ROLES_PATH=.. ANSIBLE_FORCE_COLOR=true ansible-playbook tests/main.yml"
