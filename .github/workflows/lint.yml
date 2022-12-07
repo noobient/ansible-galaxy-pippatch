@@ -28,10 +28,10 @@ jobs:
         # TODO ansible-lint ignores role-name in skip_list, and exclude on the
         # meta doesn't work either:
         # https://github.com/ansible/ansible-lint/issues/2576
-        # Apply a patch for now, the simplest is to just run the test playbook.
+        # Apply a patch for now, quick-n-dirty sed for the rescue.
         run: >
             docker run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-lint /bin/bash --login -c
             "git config --global --add safe.directory /repo &&
             yamllint --strict . &&
-            ANSIBLE_ROLES_PATH=.. ansible-playbook tests/main.yml &&
+            sed -i.orig '/^[[:space:]]*"role-name",$/d' /root/.local/lib/python3.11/site-packages/ansiblelint/config.py &&
             ansible-lint --strict"
