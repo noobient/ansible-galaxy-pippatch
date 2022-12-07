@@ -34,5 +34,4 @@ jobs:
             "git config --global --add safe.directory /repo &&
             yamllint --strict . &&
             sed -i.orig '/\"role-name\",$/d' /root/.local/lib/python3.11/site-packages/ansiblelint/config.py &&
-            grep role-name /root/.local/lib/python3.11/site-packages/ansiblelint/config.py &&
             ansible-lint --strict"
