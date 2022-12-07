@@ -15,7 +15,7 @@
   command:
     cmd: "pip3 install {{ package }}"
   changed_when: ('Successfully installed' in installed_pkg.stdout)
-  when: force is defined and force|bool == true
+  when: force is defined and force|bool
   register: installed_pkg
 
 - name: Determine package install path
