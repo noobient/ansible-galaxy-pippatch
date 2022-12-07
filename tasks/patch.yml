@@ -20,13 +20,13 @@
 
 - name: Determine package install path
   shell:
-    cmd: "pip3 show {{ package }} | grep ^Location | mawk -F ':' '{print $2}' | xargs"
+    cmd: "pip3 show {{ package }} | grep ^Location | awk -F ':' '{print $2}' | xargs"
   changed_when: false
   register: pkg_path
 
 - name: Determine package version
   shell:
-    cmd: "pip3 show {{ package }} | grep ^Version | mawk -F ':' '{print $2}' | xargs"
+    cmd: "pip3 show {{ package }} | grep ^Version | awk -F ':' '{print $2}' | xargs"
   changed_when: false
   register: pkg_ver
 
@@ -36,14 +36,14 @@
     dest: "{{ pkg_path.stdout }}/{{ patch }}"
     mode: '0644'
 
-- name: Test patch
+- name: Test patch # noqa command-instead-of-module
   command:
     cmd: "patch -d {{ pkg_path.stdout }} -p0 --forward -i {{ patch }} --dry-run"
   changed_when: false
   failed_when: false
   register: test_patch
 
-- name: Apply patch
+- name: Apply patch # noqa command-instead-of-module
   command:
     cmd: "patch -d {{ pkg_path.stdout }} -p0 --forward -i {{ patch }} --backup"
   when: patch_already_str not in test_patch.stdout

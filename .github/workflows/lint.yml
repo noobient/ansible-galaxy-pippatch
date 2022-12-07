@@ -25,9 +25,13 @@ jobs:
         # > Failed to discover lintable files using git: fatal: detected dubious
         # > ownership in repository
         # warning, so suppress that, too.
-        # ansible-lint ignores role-name in skip_list, and exclude on the meta
-        # doesn't work either, so limit ansible-lint on tasks for now:
+        # TODO ansible-lint ignores role-name in skip_list, and exclude on the
+        # meta doesn't work either:
         # https://github.com/ansible/ansible-lint/issues/2576
+        # Apply a patch for now, the simplest is to just run the test playbook.
         run: >
             docker run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-lint /bin/bash --login -c
-            "git config --global --add safe.directory /repo && yamllint --strict . && ansible-lint --strict"
+            "git config --global --add safe.directory /repo &&
+            yamllint --strict . &&
+            ANSIBLE_ROLES_PATH=.. ansible-playbook tests/main.yml &&
+            ansible-lint --strict"
