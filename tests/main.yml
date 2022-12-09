@@ -8,5 +8,5 @@
         package: "{{ item.package }}"
         force: "{{ item.force }}"
       loop:
-        #- { patch: 'ansible-lint-role-name.patch', package: 'ansible-lint', force: 'true' }
+        - { patch: 'ansible-lint-role-name.patch', package: 'ansible-lint', force: 'true' }
         - { patch: 'ansible-core-ssh-fix.patch', package: 'ansible-core', force: true }
