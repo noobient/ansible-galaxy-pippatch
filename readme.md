@@ -29,6 +29,25 @@ This role lets you patch pip packages with a supplied patch file.
       patch: ansible-core-ssh-fix.patch
 ```
 
+`ansible-core-ssh-fix.patch.j2`:
+
+```diff
+diff -ruN ansible.orig/plugins/connection/ssh.py ansible/plugins/connection/ssh.py
+--- ansible.orig/plugins/connection/ssh.py	2022-12-07 00:48:38.377050886 +0100
++++ ansible/plugins/connection/ssh.py	2022-12-07 00:49:20.199204222 +0100
+@@ -736,8 +736,8 @@
+         if not conn_password:
+             self._add_args(
+                 b_command, (
+-                    b"-o", b"KbdInteractiveAuthentication=no",
+-                    b"-o", b"PreferredAuthentications=gssapi-with-mic,gssapi-keyex,hostbased,publickey",
++                    b"-o", b"KbdInteractiveAuthentication=yes",
++                    b"-o", b"PreferredAuthentications=gssapi-with-mic,gssapi-keyex,hostbased,publickey,keyboard-interactive",
+                     b"-o", b"PasswordAuthentication=no"
+                 ),
+                 u"ansible_password/ansible_ssh_password not set"
+```
+
 ## Return Values
 
 N/A
