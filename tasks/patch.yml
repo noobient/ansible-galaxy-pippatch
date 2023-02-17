@@ -43,7 +43,7 @@
   failed_when: false
   register: test_patch
 
-- name: Apply patch # noqa command-instead-of-module
+- name: Apply patch # noqa command-instead-of-module no-changed-when
   command:
     cmd: "patch -d {{ pkg_path.stdout }} -p0 --forward -i {{ patch }} --backup"
   when: patch_already_str not in test_patch.stdout
