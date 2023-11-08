@@ -23,7 +23,7 @@ This role lets you patch pip packages with a supplied patch file.
 
 ```yml
 - include_role:
-    name: bviktor.pippatch
+    name: noobient.pippatch
     vars:
       package: ansible-core
       patch: ansible-core-ssh-fix.patch
